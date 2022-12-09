@@ -1,0 +1,41 @@
+<mat-drawer-container autosize>
+  <mat-drawer #drawer
+    mode="side"
+    [opened]="true">
+    <div class="header"
+      [ngClass]="{ 'mat-elevation-z8': showHeaderShadow$ | async }">
+      <h2>Components</h2>
+      <small>Drag and drop components from below into your template</small>
+    </div>
+    <div cdkDropList
+      #componentsList="cdkDropList"
+      [cdkDropListData]="components"
+      [cdkDropListConnectedTo]="[templateList]"
+      class="component-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="component mat-elevation-z1"
+        *ngFor="let item of components"
+        cdkDrag>
+        <img [src]="'/assets/' + item">
+      </div>
+    </div>
+  </mat-drawer>
+
+  <div class="sidenav-content">
+    <div class="template">
+      <div cdkDropList
+        #templateList="cdkDropList"
+        [cdkDropListData]="template"
+        [cdkDropListConnectedTo]="[componentsList]"
+        class="template"
+        (cdkDropListDropped)="drop($event)">
+        <div class="component"
+          *ngFor="let item of template"
+          cdkDrag>
+          <img [src]="'/assets/' + item">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</mat-drawer-container>
