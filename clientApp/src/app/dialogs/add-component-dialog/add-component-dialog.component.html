@@ -12,6 +12,6 @@
         *ngIf="uploadRequest$ | async as uploadRequest"
         color="primary"
         (click)="submit()"
-        [disabled]="fileControl.invalid"
+        [disabled]="fileControl.invalid || uploadRequest?.loading || !file"
         cdkFocusInitial>{{ uploadRequest?.loading ? 'Loading...' : 'Upload'}}</button>
 </div>

@@ -14,7 +14,7 @@ export class AddComponentDialogComponent {
   public fileControl = new FormControl<File | null>(null, [Validators.required]);
   public uploadRequest$: Observable<any> = of({ loading: false, result: null });
 
-  private file?: File;
+  public file?: File;
 
   constructor(
     private componentsService: ComponentsService,
