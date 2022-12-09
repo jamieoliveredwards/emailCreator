@@ -15,6 +15,15 @@
             top: 0;
             background-color: white;
         }
+
+        ::ng-deep {
+            .mat-drawer-inner-container {
+                display: flex;
+                flex-direction: column;
+                max-height: 100%;
+                overflow: hidden;
+            }
+        }
     }
 
     .sidenav-content {
@@ -34,6 +43,11 @@
 
 .component-list {
     padding: 32px;
+    overflow: scroll;
+
+    .add-component-button {
+        width: 100%;
+    }
 
     .component {
         margin: 12px 0;

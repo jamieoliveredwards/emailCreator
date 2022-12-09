@@ -1,28 +1,34 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
+import { API_BASE } from './app.module';
+import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
+import { ComponentsService } from './services/components.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
 
-  @ViewChild('drawer', { read: ElementRef }) public componentList?: ElementRef<HTMLDivElement>;
+  @ViewChild('componentsList', { read: ElementRef }) public componentList?: ElementRef<HTMLDivElement>;
 
-  public components = ['header.jpeg', 'content.jpeg', 'content_and_img.png', 'content_and_content.png', 'content_cta.png', 'footer_1.png', 'product_and_product.png'];
+  public componentsRefresh = new BehaviorSubject<null>(null);
+  public components$ = this.componentsRefresh.pipe(
+    switchMap(() => this.componentsService.getAll())
+  );
 
   public template: any[] = [];
 
   public showHeaderShadow$ = new BehaviorSubject<boolean>(false);
 
-  ngAfterViewInit() {
-    const drawerInner = this.componentList?.nativeElement.firstChild as HTMLDivElement;
-    drawerInner.onscroll = () => {
-      this.showHeaderShadow$.next(!!drawerInner.scrollTop);
-    }
-  }
+  constructor(
+    @Inject(API_BASE) public apiBase: string,
+    private componentsService: ComponentsService,
+    private dialog: MatDialog
+  ) { }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -35,5 +41,19 @@ export class AppComponent implements AfterViewInit {
         event.currentIndex,
       );
     }
+  }
+
+  componentsScrollHandler(event: Event) {
+    const element = event.target as HTMLDivElement;
+    this.showHeaderShadow$.next(!!element.scrollTop);
+  }
+
+  openAddComponentDialog() {
+    const subscription = AddComponentDialogComponent.show(this.dialog).afterClosed().subscribe(reload => {
+      if (reload) {
+        this.componentsRefresh.next(null);
+      }
+      subscription.unsubscribe();
+    });
   }
 }
