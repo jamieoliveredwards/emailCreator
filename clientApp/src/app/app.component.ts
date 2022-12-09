@@ -1,7 +1,7 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, switchMap, take } from 'rxjs';
 import { API_BASE } from './app.module';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
 import { ComponentsService } from './services/components.service';
@@ -12,6 +12,8 @@ import { ComponentsService } from './services/components.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  public isAdmin = window.localStorage.getItem('isAdmin');
 
   @ViewChild('componentsList', { read: ElementRef }) public componentList?: ElementRef<HTMLDivElement>;
 
@@ -55,5 +57,11 @@ export class AppComponent {
       }
       subscription.unsubscribe();
     });
+  }
+
+  deleteComponent(component: string) {
+    this.componentsService.delete(component).pipe(
+      take(1)
+    ).subscribe(() => this.componentsRefresh.next(null));
   }
 }

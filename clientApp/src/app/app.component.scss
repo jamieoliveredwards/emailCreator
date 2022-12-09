@@ -34,10 +34,24 @@
 }
 
 .component {
+    position: relative;
     cursor: grab;
     img {
         width: inherit;
         margin-bottom: -6px;
+    }
+
+    button {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: none;
+    }
+
+    &:hover {
+        button {
+            display: block;
+        }
     }
 }
 

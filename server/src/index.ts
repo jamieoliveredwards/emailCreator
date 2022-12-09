@@ -44,4 +44,9 @@ app.get('/components/:fileName', (req, res) => {
     return res.sendFile(`${fileDirectory}/${req.params.fileName}`);
 });
 
+app.delete('/components/:fileName', (req, res) => {
+    fs.unlinkSync(`${fileDirectory}/${req.params.fileName}`);
+    return res.json({ result: 'success' });
+});
+
 app.listen(port, () => console.log(`Listening on port: ${port}`));

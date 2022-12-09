@@ -22,4 +22,8 @@ export class ComponentsService {
     return this.http.post<{ result: string }>(`${this.apiBase}/components`, formData);
   }
 
+  delete(component: string) {
+    return this.http.delete<{ result: string }>(`${this.apiBase}/components/${component}`);
+  }
+
 }

@@ -16,6 +16,7 @@
       (cdkDropListDropped)="drop($event)"
       (scroll)="componentsScrollHandler($event)">
       <button mat-button
+        *ngIf="isAdmin"
         class="add-component-button"
         (click)="openAddComponentDialog()">
         Add Component
@@ -23,6 +24,12 @@
       <div class="component mat-elevation-z1"
         *ngFor="let item of components"
         cdkDrag>
+        <button *ngIf="isAdmin"
+          mat-icon-button
+          (click)="deleteComponent(item)"
+          color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
         <img [src]="apiBase + '/components/' + item">
       </div>
     </div>
