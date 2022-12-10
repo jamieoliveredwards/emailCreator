@@ -27,7 +27,11 @@ export class AppComponent {
 
   public templatesRefresh = new BehaviorSubject<null>(null);
   public templates$ = this.templatesRefresh.pipe(
-    switchMap(() => this.templatesService.getAll())
+    switchMap(() => this.templatesService.getAll()),
+    tap(templates => {
+      const matchedTemplate = templates.find(t => t.name === this.template.name);
+      if (matchedTemplate) this.template = matchedTemplate;
+    })
   );
 
   public template: Template = {
@@ -83,7 +87,10 @@ export class AppComponent {
   deleteComponent(component: string) {
     this.componentsService.delete(component).pipe(
       take(1)
-    ).subscribe(() => this.componentsRefresh.next(null));
+    ).subscribe(() => {
+      this.componentsRefresh.next(null);
+      this.templatesRefresh.next(null);
+    });
   }
 
   save(template: Template) {

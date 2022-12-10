@@ -51,6 +51,15 @@ app.get('/components/:fileName', (req, res) => {
 
 app.delete('/components/:fileName', (req, res) => {
     fs.unlinkSync(`${fileDirectory}/${req.params.fileName}`);
+    const db = getDataBase();
+    const templates = db.templates.map(t => ({
+        ...t,
+        components: t.components.filter(c => c !== req.params.fileName)
+    }));
+    setDataBase({
+        ...db,
+        templates
+    });
     return res.json({ result: 'success' });
 });
 
