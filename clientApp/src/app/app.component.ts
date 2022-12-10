@@ -109,4 +109,8 @@ export class AppComponent {
       startWith(true)
     )
   }
+
+  deleteComponentFromTemplate(index: number) {
+    this.template.components.splice(index, 1);
+  }
 }

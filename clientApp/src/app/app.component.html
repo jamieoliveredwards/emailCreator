@@ -49,8 +49,14 @@
         class="template"
         (cdkDropListDropped)="drop($event)">
         <div class="component"
-          *ngFor="let item of template.components"
+          *ngFor="let item of template.components; let i = index"
           cdkDrag>
+          <button *ngIf="isAdmin"
+            mat-mini-fab
+            (click)="deleteComponentFromTemplate(i)"
+            color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
           <img [src]="apiBase + '/components/' + item">
         </div>
       </div>
