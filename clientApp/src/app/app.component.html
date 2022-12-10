@@ -41,7 +41,15 @@
       <h2>{{ template.name }}</h2>
     </div>
     <div class="template-container"
-      [style.width]="(800 * zoom) + 'px'">
+      [style.width]="(800 * zoom) + 'px'"
+      [ngClass]="{
+        empty: !template.components.length
+      }">
+      <div class="empty-message">
+        <h3>
+          Drag a component to build your template
+        </h3>
+      </div>
       <div cdkDropList
         #templateList="cdkDropList"
         [cdkDropListData]="template.components"
