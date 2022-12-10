@@ -14,6 +14,7 @@ import { ComponentsService } from './services/components.service';
 export class AppComponent {
 
   public isAdmin = window.localStorage.getItem('isAdmin');
+  public zoom = 1;
 
   @ViewChild('componentsList', { read: ElementRef }) public componentList?: ElementRef<HTMLDivElement>;
 
@@ -31,6 +32,10 @@ export class AppComponent {
     private componentsService: ComponentsService,
     private dialog: MatDialog
   ) { }
+
+  clearTemplate() {
+    this.template = [];
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {

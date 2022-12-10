@@ -28,8 +28,22 @@
 
     .sidenav-content {
         display: flex;
+        flex-direction: column;
         width: 100%;
         height: 100%;
+
+        .title {
+            position: sticky;
+            top: 0;
+            right: 0;
+            left: 0;
+            background-color: white;
+            z-index: +1;
+
+            h2 {
+                margin: 16px 32px;
+            }
+        }
     }
 }
 
@@ -69,12 +83,36 @@
     }
 }
 
-.template {
-    margin: 32px auto;
-    width: 800px;
-    min-height: 300px;
+.template-controls {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 80px;
+    right: 0;
+    background-color: white;
+    padding: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 
-    .component {
+    hr {
         width: 100%;
+    }
+
+    span {
+        margin: auto;
+    }
+}
+
+.template-container {
+    margin: 32px auto;
+    transition: width 0.3s;
+    
+    .template {
+        min-height: 300px;
+        width: 100%;
+
+        .component {
+            width: 100%;
+        }
     }
 }
