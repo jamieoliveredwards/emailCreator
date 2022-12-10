@@ -61,11 +61,12 @@ app.get('/templates', (req, res) => {
 
 app.post('/templates', (req, res) => {
     const database = getDataBase();
+    const templates = database.templates.filter(t => t.name !== req.body.name);
     const updatedDb: DataBase = {
         ...database,
         templates: [
-            ...database.templates,
-            req.body
+            req.body,
+            ...templates
         ]
     };
     setDataBase(updatedDb);
