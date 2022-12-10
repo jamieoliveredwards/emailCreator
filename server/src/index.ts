@@ -77,4 +77,15 @@ app.post('/templates', (req, res) => {
     ]);
 });
 
+app.delete('/templates/:templateName', (req, res) => {
+    const database = getDataBase();
+    const name = req.params.templateName.replace('_', ' ');
+    const templates = database.templates.filter(t => t.name !== name);
+    setDataBase({
+        ...database,
+        templates
+    });
+    return res.json(templates);
+})
+
 app.listen(port, () => console.log(`Listening on port: ${port}`));

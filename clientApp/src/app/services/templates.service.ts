@@ -27,7 +27,8 @@ export class TemplatesService {
     return this.http.post<{ result: string }>(`${this.apiBase}/templates`, template);
   }
 
-  delete(component: string) {
-    return this.http.delete<{ result: string }>(`${this.apiBase}/templates/${component}`);
+  delete(templateName: string) {
+    const name = templateName.replace(' ', '_');
+    return this.http.delete<{ result: string }>(`${this.apiBase}/templates/${name}`);
   }
 }

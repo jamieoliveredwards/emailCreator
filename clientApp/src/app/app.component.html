@@ -68,6 +68,12 @@
         [disabled]="saveInProgress$ | async">
         <mat-icon>save</mat-icon>
       </button>
+      <button mat-icon-button
+        color="warn"
+        (click)="deleteTemplate()"
+        [disabled]="deleteInProgress$ | async">
+        <mat-icon>delete</mat-icon>
+      </button>
       <hr>
       <span [style.fontWeight]="'bold'">Zoom</span>
       <button mat-icon-button
@@ -79,14 +85,12 @@
         (click)="zoom = zoom - 0.1">
         <mat-icon>remove</mat-icon>
       </button>
-      <ng-container *ngIf="template.components.length">
-        <hr>
-        <button mat-icon-button
-          (click)="clearTemplate()"
-          color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </ng-container>
+      <hr>
+      <button mat-icon-button
+        (click)="clearTemplate(false)"
+        [disabled]="!template.components.length">
+        <mat-icon>restart_alt</mat-icon>
+      </button>
 
       <mat-menu #templatesMenu="matMenu">
         <button *ngFor="let item of templates$ | async"

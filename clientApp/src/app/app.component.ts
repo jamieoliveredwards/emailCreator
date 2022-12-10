@@ -1,7 +1,7 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, startWith, switchMap, take, tap } from 'rxjs';
 import { API_BASE } from './app.module';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
 import { SaveTemplateDialogComponent } from './dialogs/save-template-dialog/save-template-dialog.component';
@@ -37,6 +37,7 @@ export class AppComponent {
 
   public showHeaderShadow$ = new BehaviorSubject<boolean>(false);
   public saveInProgress$: Observable<boolean> = of(false);
+  public deleteInProgress$: Observable<boolean> = of(false);
 
   constructor(
     @Inject(API_BASE) public apiBase: string,
@@ -45,9 +46,9 @@ export class AppComponent {
     private dialog: MatDialog
   ) { }
 
-  clearTemplate() {
+  clearTemplate(clearName = true) {
     this.template = {
-      name: 'New template',
+      name: clearName ? 'New template' : this.template.name,
       components: []
     };
   }
@@ -94,5 +95,18 @@ export class AppComponent {
       }),
       map(() => false)
     );
+  }
+
+  deleteTemplate() {
+    this.deleteInProgress$ = this.templatesService.delete(this.template.name).pipe(
+      tap(response => {
+        if (response) {
+          this.templatesRefresh.next(null);
+          this.clearTemplate();
+        }
+      }),
+      map(() => false),
+      startWith(true)
+    )
   }
 }
