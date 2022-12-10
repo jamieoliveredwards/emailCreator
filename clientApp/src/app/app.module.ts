@@ -9,9 +9,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SaveTemplateDialogComponent } from './dialogs/save-template-dialog/save-template-dialog.component';
 
 export const API_BASE = new InjectionToken<string>('API_BASE');
 
@@ -20,13 +22,15 @@ const materialModules = [
   MatSidenavModule,
   MatButtonModule,
   MatDialogModule,
-  MatIconModule
+  MatIconModule,
+  MatMenuModule
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddComponentDialogComponent
+    AddComponentDialogComponent,
+    SaveTemplateDialogComponent
   ],
   imports: [
     BrowserModule,

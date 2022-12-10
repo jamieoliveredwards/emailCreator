@@ -1,10 +1,12 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, combineLatest, switchMap, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { API_BASE } from './app.module';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
+import { SaveTemplateDialogComponent } from './dialogs/save-template-dialog/save-template-dialog.component';
 import { ComponentsService } from './services/components.service';
+import { Template, TemplatesService } from './services/templates.service';
 
 @Component({
   selector: 'app-root',
@@ -23,18 +25,31 @@ export class AppComponent {
     switchMap(() => this.componentsService.getAll())
   );
 
-  public template: any[] = [];
+  public templatesRefresh = new BehaviorSubject<null>(null);
+  public templates$ = this.templatesRefresh.pipe(
+    switchMap(() => this.templatesService.getAll())
+  );
+
+  public template: Template = {
+    name: 'New template',
+    components: []
+  };
 
   public showHeaderShadow$ = new BehaviorSubject<boolean>(false);
+  public saveInProgress$: Observable<boolean> = of(false);
 
   constructor(
     @Inject(API_BASE) public apiBase: string,
     private componentsService: ComponentsService,
+    private templatesService: TemplatesService,
     private dialog: MatDialog
   ) { }
 
   clearTemplate() {
-    this.template = [];
+    this.template = {
+      name: 'New template',
+      components: []
+    };
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -68,5 +83,16 @@ export class AppComponent {
     this.componentsService.delete(component).pipe(
       take(1)
     ).subscribe(() => this.componentsRefresh.next(null));
+  }
+
+  save(template: Template) {
+    this.saveInProgress$ = SaveTemplateDialogComponent.show(this.dialog, template).afterClosed().pipe(
+      tap(reload => {
+        if (reload) {
+          this.templatesRefresh.next(null);
+        }
+      }),
+      map(() => false)
+    );
   }
 }

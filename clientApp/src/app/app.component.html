@@ -38,18 +38,18 @@
 
   <div class="sidenav-content">
     <div class="title mat-elevation-z1">
-      <h2>Template</h2>
+      <h2>{{ template.name }}</h2>
     </div>
     <div class="template-container"
       [style.width]="(800 * zoom) + 'px'">
       <div cdkDropList
         #templateList="cdkDropList"
-        [cdkDropListData]="template"
+        [cdkDropListData]="template.components"
         [cdkDropListConnectedTo]="[componentsList]"
         class="template"
         (cdkDropListDropped)="drop($event)">
         <div class="component"
-          *ngFor="let item of template"
+          *ngFor="let item of template.components"
           cdkDrag>
           <img [src]="apiBase + '/components/' + item">
         </div>
@@ -57,6 +57,18 @@
     </div>
 
     <div class="template-controls mat-elevation-z2">
+      <span [style.fontWeight]="'bold'">File</span>
+      <button mat-icon-button
+        [matMenuTriggerFor]="templatesMenu"
+        [disabled]="!(templates$ | async)?.length">
+        <mat-icon>file_open</mat-icon>
+      </button>
+      <button mat-icon-button
+        (click)="save(template)"
+        [disabled]="saveInProgress$ | async">
+        <mat-icon>save</mat-icon>
+      </button>
+      <hr>
       <span [style.fontWeight]="'bold'">Zoom</span>
       <button mat-icon-button
         (click)="zoom = zoom + 0.1">
@@ -67,7 +79,7 @@
         (click)="zoom = zoom - 0.1">
         <mat-icon>remove</mat-icon>
       </button>
-      <ng-container *ngIf="template.length">
+      <ng-container *ngIf="template.components.length">
         <hr>
         <button mat-icon-button
           (click)="clearTemplate()"
@@ -75,6 +87,14 @@
           <mat-icon>delete</mat-icon>
         </button>
       </ng-container>
+
+      <mat-menu #templatesMenu="matMenu">
+        <button *ngFor="let item of templates$ | async"
+          mat-menu-item
+          (click)="template = item">
+          {{ item.name }}
+        </button>
+      </mat-menu>
     </div>
   </div>
 

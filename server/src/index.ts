@@ -6,9 +6,14 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import sha256 from 'sha256';
+import { DataBase } from './database.interface';
 dotenv.config();
 
 const fileDirectory = path.join(__dirname, '../', 'files');
+const getDataBase: () => DataBase = () => JSON.parse(fs.readFileSync(`${fileDirectory}/database/database.json`, { encoding: 'utf8' }));
+const setDataBase: (newDbValue: DataBase) => void = (newDbValue) => {
+    fs.writeFileSync(`${fileDirectory}/database/database.json`, JSON.stringify(newDbValue));
+};
 
 const port = process.env['PORT'];
 
@@ -21,7 +26,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const ext = file.originalname.split('.').reverse()[0];
-        const fileName = `${new Date().getMilliseconds()}.${ext}`;
+        const fileName = `${sha256(file.originalname + new Date().getUTCMilliseconds())}.${ext}`;
         return cb(null, fileName);
     }
 });
@@ -32,7 +37,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/components', (req, res) => {
-    const files = fs.readdirSync(fileDirectory).filter(name => name !== '.gitkeep');
+    const files = fs.readdirSync(fileDirectory).filter(name => !['.gitkeep', 'database'].includes(name));
     return res.json(files);
 });
 
@@ -47,6 +52,28 @@ app.get('/components/:fileName', (req, res) => {
 app.delete('/components/:fileName', (req, res) => {
     fs.unlinkSync(`${fileDirectory}/${req.params.fileName}`);
     return res.json({ result: 'success' });
+});
+
+app.get('/templates', (req, res) => {
+    const database = getDataBase();
+    res.json(database.templates);
+});
+
+app.post('/templates', (req, res) => {
+    const database = getDataBase();
+    const updatedDb: DataBase = {
+        ...database,
+        templates: [
+            ...database.templates,
+            req.body
+        ]
+    };
+    setDataBase(updatedDb);
+
+    return res.json([
+        ...database.templates,
+        req.body
+    ]);
 });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
