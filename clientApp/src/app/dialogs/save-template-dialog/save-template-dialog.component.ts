@@ -25,7 +25,11 @@ export class SaveTemplateDialogComponent {
     this.saveRequest$ = this.templatesService.create(this.template).pipe(
       startWith({ loading: true, result: null }),
       tap(response => {
-        if (response) return this.dialogRef.close(true);
+        if (response) {
+          setTimeout(() => {
+            this.dialogRef.close(true);
+          }, 0);
+        };
       })
     );
   }

@@ -31,7 +31,11 @@ export class AddComponentDialogComponent {
       this.uploadRequest$ = this.componentsService.create(this.file).pipe(
         startWith({ loading: true, result: null }),
         tap(response => {
-          if (response.result === 'success') return this.dialogRef.close(true);
+          if (response.result === 'success') {
+            setTimeout(() => {
+              this.dialogRef.close(true);
+            }, 0);
+          };
         })
       );
     }
