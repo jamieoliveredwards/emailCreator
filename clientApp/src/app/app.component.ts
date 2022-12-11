@@ -19,6 +19,7 @@ export class AppComponent {
   public zoom = 1;
 
   @ViewChild('componentsList', { read: ElementRef }) public componentList?: ElementRef<HTMLDivElement>;
+  @ViewChild('templateList', { read: ElementRef }) public templateList?: ElementRef<HTMLDivElement>;
 
   public componentsRefresh = new BehaviorSubject<null>(null);
   public components$ = this.componentsRefresh.pipe(
@@ -120,4 +121,21 @@ export class AppComponent {
   deleteComponentFromTemplate(index: number) {
     this.template.components.splice(index, 1);
   }
+
+  // print() {
+  //   console.log(this.templateList);
+  //   const iFrame = document.createElement('iframe');
+  //   iFrame.style.position = "absolute";
+  //   iFrame.style.top = "-10000px";
+  //   document.body.appendChild(iFrame);
+  //   iFrame.contentDocument?.write(this.templateList?.nativeElement.innerHTML || '');
+
+
+  //   setTimeout(function () {
+  //     iFrame.focus();
+  //     iFrame.contentWindow?.print();
+  //     iFrame.parentNode?.removeChild(iFrame);// remove frame
+  //   }, 3000); // wait for images to load inside iframe
+  //   window.focus();
+  // }
 }

@@ -45,7 +45,8 @@
       [ngClass]="{
         empty: !template.components.length
       }">
-      <div class="empty-message">
+      <div *ngIf="!template.components.length"
+        class="empty-message">
         <h3>
           Drag a component to build your template
         </h3>
@@ -73,6 +74,10 @@
     <div class="template-controls mat-elevation-z2">
       <span [style.fontWeight]="'bold'">File</span>
       <button mat-icon-button
+        (click)="clearTemplate()">
+        <mat-icon>note_add</mat-icon>
+      </button>
+      <button mat-icon-button
         [matMenuTriggerFor]="templatesMenu"
         [disabled]="!(templates$ | async)?.length">
         <mat-icon>file_open</mat-icon>
@@ -91,12 +96,14 @@
       <hr>
       <span [style.fontWeight]="'bold'">Zoom</span>
       <button mat-icon-button
-        (click)="zoom = zoom + 0.1">
+        (click)="zoom = zoom + 0.1"
+        [disabled]="zoom >= 1.2">
         <mat-icon>add</mat-icon>
       </button>
       <span class="current-zoom">{{ zoom | percent }}</span>
       <button mat-icon-button
-        (click)="zoom = zoom - 0.1">
+        (click)="zoom = zoom - 0.1"
+        [disabled]="zoom < 0.11">
         <mat-icon>remove</mat-icon>
       </button>
       <hr>
@@ -105,6 +112,10 @@
         [disabled]="!template.components.length">
         <mat-icon>restart_alt</mat-icon>
       </button>
+      <!-- <button mat-icon-button
+        (click)="print()">
+        <mat-icon>print</mat-icon>
+      </button> -->
 
       <mat-menu #templatesMenu="matMenu">
         <button *ngFor="let item of templates$ | async"
