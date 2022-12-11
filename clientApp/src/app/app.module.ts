@@ -10,6 +10,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,7 +25,9 @@ const materialModules = [
   MatButtonModule,
   MatDialogModule,
   MatIconModule,
-  MatMenuModule
+  MatMenuModule,
+  MatFormFieldModule,
+  MatInputModule
 ];
 
 @NgModule({
