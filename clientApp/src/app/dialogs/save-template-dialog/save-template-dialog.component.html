@@ -1,20 +1,22 @@
 <h1 mat-dialog-title>Save Template</h1>
-<div mat-dialog-content>
-    <mat-form-field appearance="outline">
-        <mat-label>Template Name</mat-label>
-        <input matInput
-            type="text"
-            [(ngModel)]="template.name">
-    </mat-form-field>
-</div>
-<div mat-dialog-actions
-    align="end">
-    <button mat-button
-        matDialogClose>Close</button>
-    <button mat-button
-        *ngIf="saveRequest$ | async as saveRequest"
-        color="primary"
-        (click)="submit()"
-        [disabled]="!template.name || saveRequest?.loading"
-        cdkFocusInitial>{{ saveRequest?.loading ? 'Loading...' : 'Save'}}</button>
-</div>
+<form (ngSubmit)="submit()" [formGroup]="formGroup">
+    <div mat-dialog-content>
+        <mat-form-field appearance="outline">
+            <mat-label>Template Name</mat-label>
+            <input matInput
+                type="text"
+                formControlName="name">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions
+        align="end">
+        <button mat-button
+            matDialogClose>Close</button>
+        <button mat-button
+            *ngIf="saveRequest$ | async as saveRequest"
+            color="primary"
+            type="submit"
+            [disabled]="formGroup.invalid || saveRequest?.loading"
+            cdkFocusInitial>{{ saveRequest?.loading ? 'Loading...' : 'Save'}}</button>
+    </div>
+</form>

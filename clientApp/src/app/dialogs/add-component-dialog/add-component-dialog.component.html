@@ -1,17 +1,19 @@
 <h1 mat-dialog-title>Upload a New Component</h1>
-<div mat-dialog-content>
-    <input type="file"
-        [formControl]="fileControl"
-        (change)="onFileSelected($event)">
-</div>
-<div mat-dialog-actions
-    align="end">
-    <button mat-button
-        matDialogClose>Close</button>
-    <button mat-button
-        *ngIf="uploadRequest$ | async as uploadRequest"
-        color="primary"
-        (click)="submit()"
-        [disabled]="fileControl.invalid || uploadRequest?.loading || !file"
-        cdkFocusInitial>{{ uploadRequest?.loading ? 'Loading...' : 'Upload'}}</button>
-</div>
+<form (ngSubmit)="submit()" [formGroup]="formGroup">
+    <div mat-dialog-content>
+        <input type="file"
+            formControlName="file"
+            (change)="onFileSelected($event)">
+    </div>
+    <div mat-dialog-actions
+        align="end">
+        <button mat-button
+            matDialogClose>Close</button>
+        <button mat-button
+            *ngIf="uploadRequest$ | async as uploadRequest"
+            color="primary"
+            type="submit"
+            [disabled]="formGroup.invalid || uploadRequest?.loading || !file"
+            cdkFocusInitial>{{ uploadRequest?.loading ? 'Loading...' : 'Upload'}}</button>
+    </div>
+</form>

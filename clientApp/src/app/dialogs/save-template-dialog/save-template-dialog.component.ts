@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, of, startWith, tap } from 'rxjs';
 import { Template, TemplatesService } from 'src/app/services/templates.service';
@@ -10,24 +11,29 @@ import { Template, TemplatesService } from 'src/app/services/templates.service';
 })
 export class SaveTemplateDialogComponent {
 
+  public formGroup = new FormGroup({
+    name: new FormControl<string>(this.template.name, [Validators.required])
+  });
+
   public saveRequest$?: Observable<any> = of({ loading: false, result: null });
-  public template!: Template;
 
   constructor(
     private templatesService: TemplatesService,
-    private dialogRef: MatDialogRef<SaveTemplateDialogComponent, boolean>,
-    @Inject(MAT_DIALOG_DATA) public data: Template
-  ) {
-    this.template = { ...data };
-  }
+    private dialogRef: MatDialogRef<SaveTemplateDialogComponent, Template>,
+    @Inject(MAT_DIALOG_DATA) public template: Template
+  ) { }
 
   public submit() {
-    this.saveRequest$ = this.templatesService.create(this.template).pipe(
+    const newTemplateValue = {
+      ...this.template,
+      name: this.formGroup.value.name as string
+    }
+    this.saveRequest$ = this.templatesService.create(newTemplateValue).pipe(
       startWith({ loading: true, result: null }),
       tap(response => {
         if (response) {
           setTimeout(() => {
-            this.dialogRef.close(true);
+            this.dialogRef.close(newTemplateValue);
           }, 0);
         };
       })

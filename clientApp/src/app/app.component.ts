@@ -96,12 +96,15 @@ export class AppComponent {
 
   save(template: Template) {
     this.saveInProgress$ = SaveTemplateDialogComponent.show(this.dialog, template).afterClosed().pipe(
-      tap(reload => {
-        if (reload) {
+      tap(template => {
+        console.log()
+        if (template) {
           this.templatesRefresh.next(null);
+          this.template = template;
         }
       }),
-      map(() => false)
+      map(() => false),
+      startWith(false)
     );
   }
 
@@ -114,7 +117,7 @@ export class AppComponent {
         }
       }),
       map(() => false),
-      startWith(true)
+      startWith(false)
     )
   }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TemplateLiteral } from '@angular/compiler';
 import { Inject, Injectable } from '@angular/core';
-import { shareReplay } from 'rxjs';
+import { shareReplay, tap } from 'rxjs';
 import { API_BASE } from '../app.module';
 
 export interface Template {
@@ -29,6 +29,8 @@ export class TemplatesService {
 
   delete(templateName: string) {
     const name = templateName.replace(' ', '_');
-    return this.http.delete<{ result: string }>(`${this.apiBase}/templates/${name}`);
+    return this.http.delete<{ result: string }>(`${this.apiBase}/templates/${name}`).pipe(
+      tap(val => console.log(val))
+    )
   }
 }

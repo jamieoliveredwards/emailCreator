@@ -47,9 +47,9 @@
       }">
       <div *ngIf="!template.components.length"
         class="empty-message">
-        <h3>
+        <h2>
           Drag a component to build your template
-        </h3>
+        </h2>
       </div>
       <div cdkDropList
         #templateList="cdkDropList"
@@ -84,15 +84,20 @@
       </button>
       <button mat-icon-button
         (click)="save(template)"
-        [disabled]="saveInProgress$ | async">
+        [disabled]="(saveInProgress$ | async) || !template.components.length">
         <mat-icon>save</mat-icon>
       </button>
-      <button mat-icon-button
-        color="warn"
-        (click)="deleteTemplate()"
-        [disabled]="deleteInProgress$ | async">
-        <mat-icon>delete</mat-icon>
-      </button>
+      <ng-container *ngIf="{
+        isSaved: (templates$ | async) | arrayContains : template : 'name',
+        isProgress: deleteInProgress$ | async
+      } as state">
+        <button mat-icon-button
+          color="warn"
+          (click)="deleteTemplate()"
+          [disabled]="state.isProgress || !state.isSaved">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-container>
       <hr>
       <span [style.fontWeight]="'bold'">Zoom</span>
       <button mat-icon-button

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of, startWith, tap } from 'rxjs';
 import { ComponentsService } from 'src/app/services/components.service';
@@ -11,7 +11,9 @@ import { ComponentsService } from 'src/app/services/components.service';
 })
 export class AddComponentDialogComponent {
 
-  public fileControl = new FormControl<File | null>(null, [Validators.required]);
+  public formGroup = new FormGroup({
+    file: new FormControl<File | null>(null, [Validators.required])
+  })
   public uploadRequest$: Observable<any> = of({ loading: false, result: null });
 
   public file?: File;

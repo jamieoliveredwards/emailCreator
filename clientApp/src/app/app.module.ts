@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddComponentDialogComponent } from './dialogs/add-component-dialog/add-component-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SaveTemplateDialogComponent } from './dialogs/save-template-dialog/save-template-dialog.component';
+import { ArrayContainsPipe } from './pipes/array-contains.pipe';
 
 export const API_BASE = new InjectionToken<string>('API_BASE');
 
@@ -34,7 +35,8 @@ const materialModules = [
   declarations: [
     AppComponent,
     AddComponentDialogComponent,
-    SaveTemplateDialogComponent
+    SaveTemplateDialogComponent,
+    ArrayContainsPipe
   ],
   imports: [
     BrowserModule,
